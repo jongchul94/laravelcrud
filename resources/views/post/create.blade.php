@@ -1,6 +1,7 @@
 @extends('header')
 @section('title')
     <h1>작성</h1>
+@endsection
 @section('body')
     <form method="post" action="{{route('store')}}">
         @csrf

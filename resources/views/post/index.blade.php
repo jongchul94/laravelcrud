@@ -4,13 +4,13 @@
 @endsection
 @section('body')
     <div>
+        @foreach($posts as $post)
+            <a href="/post/{{$post->id}}"><li>{{$post->title}}</li></a>
+        @endforeach
+    </div>
+    <div>
         <a href="{{route('create')}}">
             <input type="button" value="작성">
         </a>
-    </div>
-    <div>
-        @foreach($posts as $post)
-            <li>{{$post->title}}</li>
-        @endforeach
     </div>
 @endsection

@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     //
     public function index(){
-        $posts = Post::orderBy('created_at', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
         return view('post.index', [
             'posts' => $posts
         ]);
@@ -20,10 +20,12 @@ class PostController extends Controller
     }
 
     public function store(Request $request){
-        $post = Post::create([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
+        $request = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
         ]);
+        $post = Post::create($request);
+
         return redirect('post/'.$post->id);
     }
 
@@ -42,13 +44,15 @@ class PostController extends Controller
     }
 
     public function update(Request $request){
-        $post = Post::find($request->id);
-        $post->update([
-            'title' => $request->title,
-            'content' => $request->content
+        $id = $request->id;
+        $post = Post::find($id);
+        $request = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
         ]);
+        $post->update($request);
 
-        return redirect('post/'.$request->id);
+        return redirect('post/'.$id);
     }
 
     public function destroy($id){

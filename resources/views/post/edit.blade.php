@@ -3,20 +3,25 @@
     <h1>수정</h1>
 @endsection
 @section('body')
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            <div class="alert alert-danger">{{$error}}</div>
+        @endforeach
+    @endif
     <form method="post" action="{{route('update', ['id' => $post->id])}}">
         @method('PUT')
         @csrf
         <div>
-            <span>제목 : </span>
-            <input type="text" name="title" value="{{$post->title}}">
+            <label class="col-form-label">제목 : </label>
+            <input class="form-control @error('title') is-invalid @enderror" type="text" name="title" value="{{$post->title}}">
         </div>
         <div>
-            <span>내용 : </span>
-            <textarea name="content">{{$post->content}}</textarea>
+            <label class="col-form-label">내용 : </label>
+            <textarea class="form-control @error('content') is-invalid @enderror" name="content">{{$post->content}}</textarea>
         </div>
-        <div>
-            <input type="submit" value="수정">
-            <input type="button" value="취소" onclick="location.href='{{route('show', ['id' => $post->id])}}'">
+        <div class="mt-3">
+            <input class="btn btn-dark" type="submit" value="수정">
+            <input class="btn btn-secondary" type="button" value="취소" onclick="location.href='{{route('show', ['id' => $post->id])}}'">
         </div>
     </form>
 @endsection

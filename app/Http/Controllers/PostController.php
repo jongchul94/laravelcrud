@@ -8,8 +8,13 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     //
-    public function index(){
-        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
+    public function index(Request $request){
+        $posts = null;
+        if($request->searchValue){
+            $posts = Post::where('title', 'like', '%'.$request->searchValue.'%')->orderByDesc('created_at')->paginate(3);
+        }else{
+            $posts = Post::orderBy('created_at', 'desc')->paginate(3);
+        }
         return view('post.index', [
             'posts' => $posts
         ]);
@@ -26,7 +31,7 @@ class PostController extends Controller
         ]);
         $post = Post::create($request);
 
-        return redirect('post/'.$post->id);
+        return redirect() -> route('show', ['id' => $post->id]);
     }
 
     public function show($id){
@@ -52,12 +57,12 @@ class PostController extends Controller
         ]);
         $post->update($request);
 
-        return redirect('post/'.$id);
+        return redirect() -> route('show', ['id' => $id]);
     }
 
     public function destroy($id){
         Post::destroy($id);
 
-        return redirect('post');
+        return redirect() -> route('index');
     }
 }

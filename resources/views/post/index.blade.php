@@ -3,9 +3,15 @@
     <h1>목록</h1>
 @endsection
 @section('body')
+    <div class="mb-4">
+        <form class="input-group" method="get" action="{{route('index')}}">
+            <input class="form-control" type="text" name="searchValue" id="searchValue">
+            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
     <div class="mt-3">
         @foreach($posts as $post)
-            <a href="/post/{{$post->id}}">
+            <a href="{{route('show', ['id' => $post->id])}}">
                 <li>{{$post->title}}</li>
             </a>
         @endforeach

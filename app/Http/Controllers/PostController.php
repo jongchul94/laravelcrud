@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\PostImage;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -25,37 +26,55 @@ class PostController extends Controller
     }
 
     public function store(Request $request){
-        $request = $request->validate([
+        $validate = $request->validate([
             'title' => 'required',
             'content' => 'required'
         ]);
-        $post = Post::create($request);
+        $post = Post::create($validate);
+
+        if($request->hasFile('postImage')){
+            $postImage = null;
+            $postImage = $request->validate([
+                'postImage' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+            $imageName = time().'_'.$request->file('postImage')->getClientOriginalName();
+            $imagePath = $request->file('postImage')->storeAs('public/images', $imageName);
+            $postImage['image_name'] = $imageName;
+            $postImage['image_path'] = $imagePath;
+            $postImage['post_id'] = $post->id;
+
+            PostImage::create($postImage);
+        }
 
         return redirect() -> route('show', ['id' => $post->id]);
     }
 
     public function show($id){
         $post = Post::find($id);
+        $postImages = $post->images;
         return view('post.show', [
-            'post' => $post
+            'post' => $post,
+            'postImages' => $postImages
         ]);
     }
 
     public function edit($id){
         $post = Post::find($id);
+        $postImages = $post->images;
         return view('post.edit', [
-            'post' => $post
+            'post' => $post,
+            'postImages' => $postImages
         ]);
     }
 
     public function update(Request $request){
         $id = $request->id;
         $post = Post::find($id);
-        $request = $request->validate([
+        $validate = $request->validate([
             'title' => 'required',
             'content' => 'required'
         ]);
-        $post->update($request);
+        $post->update($validate);
 
         return redirect() -> route('show', ['id' => $id]);
     }

@@ -11,4 +11,8 @@ class Post extends Model
 
     protected $table = 'posts';
     protected $fillable = ['title', 'content'];
+
+    public function images(){
+        return $this->hasMany(PostImage::class, 'post_id');
+    }
 }

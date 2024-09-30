@@ -8,7 +8,7 @@
             <div class="alert alert-danger">{{$error}}</div>
         @endforeach
     @endif
-    <form method="post" action="{{route('store')}}">
+    <form method="post" action="{{route('store')}}" enctype="multipart/form-data">
         @csrf
         <div>
             <label class="col-form-label">제목 : </label>
@@ -17,6 +17,9 @@
         <div>
             <label class="col-form-label">내용 : </label>
             <textarea class="form-control @error('content') is-invalid @enderror" name="content">{{old('content')}}</textarea>
+        </div>
+        <div class="mt-3 mb-3">
+            <input class="form-control" type="file" id="postImage" name="postImage">
         </div>
         <div class="mt-3">
             <input class="btn btn-dark" type="submit" value="저장">

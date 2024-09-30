@@ -20,5 +20,3 @@ Route::get('/post/{id}/edit', [PostController::class, 'edit']) -> name('edit');
 Route::put('/post/{id}', [PostController::class, 'update']) -> name('update');
 
 Route::delete('/post/{id}', [PostController::class, 'destroy']) -> name('destroy');
-
-// Route::get('/post/search' ,[PostController::class, 'search']) -> name('search');

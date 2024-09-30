@@ -3,11 +3,16 @@
     <h1>{{$post->title}}</h1>
 @endsection
 @section('body')
+    <div style="float: right;">
+        작성일 : {{$post->updated_at}}
+    </div>
     <div>
         {{$post->content}}
     </div>
-    <div>
-        작성일 : {{$post->updated_at}}
+    <div class="mt-4 mb-3">
+        @foreach($postImages as $postImage)
+            <img src="{{asset('images/'.$postImage->image_name)}}" style="width: 70%;">
+        @endforeach
     </div>
     <div class="mt-3 btn-group">
         <input class="btn btn-dark" type="button" value="수정" onclick="location.href='{{route('edit', ['id' => $post->id])}}'">

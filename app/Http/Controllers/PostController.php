@@ -78,7 +78,7 @@ class PostController extends Controller
     }
 
     public function destroy($id){
-        $image = PostImage::where('post_id', $id);
+        $image = PostImage::where('post_id', $id)->first();
         if($image){
             $postImage = new PostImageController();
             $postImage->destroy($image->id);

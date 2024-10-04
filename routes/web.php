@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,3 +21,5 @@ Route::get('/post/{id}/edit', [PostController::class, 'edit']) -> name('edit');
 Route::put('/post/{id}', [PostController::class, 'update']) -> name('update');
 
 Route::delete('/post/{id}', [PostController::class, 'destroy']) -> name('destroy');
+
+Route::get('/post/download/{imageId}', [PostImageController::class, 'download']) -> name('image.download');

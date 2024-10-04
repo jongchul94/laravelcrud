@@ -23,7 +23,7 @@ class PostImageController extends Controller
     }
 
     public function update(Request $request, $id){
-        $isImage = PostImage::where('post_id', $id);
+        $isImage = PostImage::where('post_id', $id)->first();
 
         if($isImage){
             Storage::delete($isImage->image_path);
@@ -47,5 +47,11 @@ class PostImageController extends Controller
 
         Storage::delete($postImage->image_path);
         $postImage->delete();
+    }
+
+    public function download($id){
+        $postImage = PostImage::find($id);
+
+        return Storage::download($postImage->image_path);
     }
 }

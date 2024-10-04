@@ -12,6 +12,7 @@
     <div class="mt-4 mb-3">
         @foreach($postImages as $postImage)
             <img src="{{asset('images/'.$postImage->image_name)}}" style="width: 70%;">
+            <p>파일명 : <a href="{{route('image.download', ['imageId' => $postImage->id])}}">{{$postImage->image_name}}</a></p>
         @endforeach
     </div>
     <div class="mt-3 btn-group">

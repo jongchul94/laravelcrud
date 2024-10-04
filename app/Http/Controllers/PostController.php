@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\PostImage;
 use Illuminate\Http\Request;
+use App\Http\Controllers\PostImageController;
+use App\Models\PostImage;
+use Illuminate\Support\Facades\App;
 
 class PostController extends Controller
 {
@@ -33,17 +35,8 @@ class PostController extends Controller
         $post = Post::create($validate);
 
         if($request->hasFile('postImage')){
-            $postImage = null;
-            $postImage = $request->validate([
-                'postImage' => 'image|mimes:jpeg,png,jpg,gif,svg',
-            ]);
-            $imageName = time().'_'.$request->file('postImage')->getClientOriginalName();
-            $imagePath = $request->file('postImage')->storeAs('public/images', $imageName);
-            $postImage['image_name'] = $imageName;
-            $postImage['image_path'] = $imagePath;
-            $postImage['post_id'] = $post->id;
-
-            PostImage::create($postImage);
+            $postImage = new PostImageController();
+            $postImage->store($request,$post->id);
         }
 
         return redirect() -> route('show', ['id' => $post->id]);
@@ -76,10 +69,20 @@ class PostController extends Controller
         ]);
         $post->update($validate);
 
+        if($request->hasFile('postImage')){
+            $postImage = new PostImageController();
+            $postImage->update($request, $id);
+        }
+
         return redirect() -> route('show', ['id' => $id]);
     }
 
     public function destroy($id){
+        $image = PostImage::where('post_id', $id);
+        if($image){
+            $postImage = new PostImageController();
+            $postImage->destroy($image->id);
+        }
         Post::destroy($id);
 
         return redirect() -> route('index');

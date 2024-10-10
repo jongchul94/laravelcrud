@@ -6,7 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PostImageController;
 use App\Models\PostImage;
-use Illuminate\Support\Facades\App;
+use App\Notifications\PostNotification;
 
 class PostController extends Controller
 {
@@ -38,6 +38,8 @@ class PostController extends Controller
             $postImage = new PostImageController();
             $postImage->store($request,$post->id);
         }
+
+        $post->notify(new PostNotification($post, '이(가) 작성되었습니다.'));
 
         return redirect() -> route('show', ['id' => $post->id]);
     }
